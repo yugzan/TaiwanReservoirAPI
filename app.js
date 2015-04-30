@@ -13,7 +13,7 @@ var outputData;
 // Library
 var reservoir = require('./libs/reservoir');
 var reservoir_today = require('./libs/reservoir_today');
-
+var invoiceLib = require('./libs/invoice');
 
 // Cron job for update output data
 var updateData = schedule.scheduleJob('*/30 * * * 1-5', function(){
@@ -63,6 +63,23 @@ app.get('/', function(req, res) {
 app.get('/today', function(req, res) {
 
     reservoir_today(function (err, reservoirData) {
+
+        if (err) {
+            return res.jsonp({
+                err: err.toString()
+            });
+        }
+
+        return res.jsonp({
+            data: reservoirData
+        });
+    });
+
+});
+
+app.get('/invoice', function(req, res) {
+
+    invoiceLib(function (err, reservoirData) {
 
         if (err) {
             return res.jsonp({
